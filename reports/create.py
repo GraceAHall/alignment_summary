@@ -14,4 +14,4 @@ def create_report(summary: Summary) -> list[dict[str, Any]]:
     
     out: list[dict[str, Any]] = list(stats.values())
     out.sort(key=lambda x: x['num_alignments'], reverse=True)
-    return out
+    return out[:10] # restricts to top 10 hits

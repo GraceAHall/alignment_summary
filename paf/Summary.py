@@ -29,4 +29,3 @@ class Summary:
         self.organism_data[organism_name].num_primary_alignments += 1
         self.organism_data[organism_name].cum_identity += alignment.get_identity()
         self.organism_data[organism_name].cum_block += alignment.get_align_block()
-        print()

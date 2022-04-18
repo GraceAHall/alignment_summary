@@ -1,5 +1,6 @@
 
 
+from typing import Tuple
 from paf.Alignment import Alignment
 from startup.cli_args import Settings
 
@@ -24,13 +25,20 @@ def select_best_alignment(alignments: list[Alignment]) -> Alignment:
     alignments.sort(key=lambda x: x.get_align_block(), reverse=True)
     return alignments[0]
 
-def summarise_paf(register: AlignmentRegister, context: Settings) -> Summary:
+def summarise_paf(register: AlignmentRegister, context: Settings, level: str) -> Summary:
     summary = Summary()
     for _, alignments in register.get_entries():
         qc_pass_alignments = filter_alignments(alignments, context)
         if qc_pass_alignments:
             best_alignment = select_best_alignment(qc_pass_alignments)
-            organism_name = best_alignment.get_species_name()
+            organism_name = get_organism_name(best_alignment, level)
             summary.add_alignment_entry(organism_name, best_alignment)
     return summary
-        
+
+def get_organism_name(alignment: Alignment, level: str) -> str:
+    if level == 'species':
+        return alignment.get_species_name()
+    elif level == 'strain':
+        return alignment.get_strain_name()
+    else:
+        raise RuntimeError(f'cannot create summary for {level}')
